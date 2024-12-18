@@ -1,19 +1,18 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
-import '../login_view.dart';
 import 'already_or_not_have_account_widget.dart';
 import 'custom_button.dart';
 import 'custom_text_field.dart';
 
-class RegisterViewBody extends StatefulWidget {
-  const RegisterViewBody({super.key});
+class LoginViewBody extends StatefulWidget {
+  const LoginViewBody({super.key});
 
   @override
-  State<RegisterViewBody> createState() => _RegisterViewBodyState();
+  State<LoginViewBody> createState() => _LoginViewBodyState();
 }
 
-class _RegisterViewBodyState extends State<RegisterViewBody> {
+class _LoginViewBodyState extends State<LoginViewBody> {
   late TextEditingController email, password;
 
   GlobalKey<FormState> globalKey = GlobalKey();
@@ -68,10 +67,13 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
               },
             ),
             AlreadyOrNotHaveAccountWidget(
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const LoginView()))),
+              text: "Don't have an account?",
+              buttonName: "Register",
+              onPressed: () => Navigator.of(context).pop()),
             const SizedBox(height: 12),
-            CustomButton(onPressed: () {
+            CustomButton(
+              name: "Login",
+              onPressed: () {
               if (globalKey.currentState!.validate()) {
                 globalKey.currentState!.save();
               }
