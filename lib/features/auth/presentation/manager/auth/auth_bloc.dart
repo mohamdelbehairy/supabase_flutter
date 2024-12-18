@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter_app/core/utils/shared_pref_service.dart';
 
 import '../../../data/repo/auth_repo.dart';
 import 'auth_events.dart';
@@ -8,7 +9,8 @@ import 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvents, AuthStates> {
   final AuthRepo _authRepo;
-  AuthBloc(this._authRepo) : super(AuthInitial()) {
+  final SharedPrefService _prefService;
+  AuthBloc(this._authRepo, this._prefService) : super(AuthInitial()) {
     on<AuthEvents>((event, emit) async {
       if (event is RegisterEvent) {
         emit(AuthLoading());
@@ -17,6 +19,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
               await _authRepo.register(event.email, event.password);
           if (response.user != null) {
             log("uid: ${Supabase.instance.client.auth.currentUser!.id}");
+            await _prefService.setString();
             emit(RegisterSuccess());
           }
         } on AuthException catch (e) {
@@ -35,6 +38,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
           final response = await _authRepo.login(event.email, event.password);
           if (response.user != null) {
             log("uid: ${Supabase.instance.client.auth.currentUser!.id}");
+            await _prefService.setString();
             emit(LoginSuccess());
           }
         } on AuthException catch (e) {
@@ -45,6 +49,11 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
           emit(AuthFailure(errorMessage: e.toString()));
           log("error from login auth: $e");
         }
+      }
+      if (event is LogoutEvent) {
+        await _authRepo.logout();
+        await _prefService.clearShared(); 
+        emit(LogoutSuccess());
       }
     });
   }
