@@ -10,6 +10,7 @@ final class LoginSuccess extends AuthStates {}
 
 final class LogoutSuccess extends AuthStates {}
 
+final class ResetPasswordSuccess extends AuthStates {}
 
 final class AuthFailure extends AuthStates {
   final String errorMessage;

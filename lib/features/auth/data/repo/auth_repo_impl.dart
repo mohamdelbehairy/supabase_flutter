@@ -7,19 +7,22 @@ class AuthRepoImpl extends AuthRepo {
 
   @override
   Future<AuthResponse> register(String email, String password) async {
-    final reponse = await _client.auth.signUp(email: email, password: password);
-    return reponse;
+    return await _client.auth.signUp(email: email, password: password);
   }
 
   @override
   Future<AuthResponse> login(String email, String password) async {
-    final reponse =
-        await _client.auth.signInWithPassword(email: email, password: password);
-    return reponse;
+    return await _client.auth
+        .signInWithPassword(email: email, password: password);
   }
 
   @override
   Future<void> logout() async {
     await _client.auth.signOut();
+  }
+
+  @override
+  Future<void> resetPassword(String email) async {
+    await _client.auth.resetPasswordForEmail(email);
   }
 }

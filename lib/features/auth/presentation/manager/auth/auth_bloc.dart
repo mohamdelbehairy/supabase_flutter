@@ -52,8 +52,14 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
       }
       if (event is LogoutEvent) {
         await _authRepo.logout();
-        await _prefService.clearShared(); 
+        await _prefService.clearShared();
         emit(LogoutSuccess());
+      }
+
+      if (event is ResetPasswordEvent) {
+        await _authRepo
+            .resetPassword(Supabase.instance.client.auth.currentUser!.email!);
+        emit(ResetPasswordSuccess());
       }
     });
   }

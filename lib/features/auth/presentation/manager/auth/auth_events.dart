@@ -12,3 +12,4 @@ final class LoginEvent extends AuthEvents {
 
 final class LogoutEvent extends AuthEvents {}
 
+final class ResetPasswordEvent extends AuthEvents {}
