@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/features/auth/presentation/views/register_view.dart';
+
+import 'features/auth/presentation/views/register_view.dart';
 
 void main() {
   runApp(const MyApp());
