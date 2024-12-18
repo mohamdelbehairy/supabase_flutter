@@ -23,7 +23,6 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
           if (e.code == "user_already_exists") {
             emit(AuthFailure(errorMessage: "user_already_exists"));
           }
-          log("error from register auth: $e");
         } catch (e) {
           emit(AuthFailure(errorMessage: e.toString()));
           log("error from register auth: $e");
@@ -35,7 +34,12 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
         try {
           final response = await _authRepo.login(event.email, event.password);
           if (response.user != null) {
+            log("uid: ${Supabase.instance.client.auth.currentUser!.id}");
             emit(LoginSuccess());
+          }
+        } on AuthException catch (e) {
+          if (e.code == "invalid_credentials") {
+            emit(AuthFailure(errorMessage: "invalid_credentials"));
           }
         } catch (e) {
           emit(AuthFailure(errorMessage: e.toString()));

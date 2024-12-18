@@ -8,7 +8,9 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(title: "Home", actions: [
+      appBar: customAppBar(title: "Home", 
+      automaticallyImplyLeading: false,
+      actions: [
         IconButton(onPressed: () {}, icon: const Icon(Icons.logout))
       ]),
     );
