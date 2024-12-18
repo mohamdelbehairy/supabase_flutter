@@ -1,5 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter_app/features/auth/presentation/manager/auth/auth_bloc.dart';
+import 'package:supabase_flutter_app/features/auth/presentation/manager/auth/auth_events.dart';
+import 'package:supabase_flutter_app/features/auth/presentation/manager/auth/auth_state.dart';
+import 'package:supabase_flutter_app/features/home/presentation/views/home_view.dart';
 
 import '../login_view.dart';
 import 'already_or_not_have_account_widget.dart';
@@ -34,51 +39,72 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Form(
-        key: globalKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CustomTextField(
-              controller: email,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Please enter your email";
-                }
-                if (!EmailValidator.validate(value)) {
-                  return "Please enter a valid email";
-                }
-                return null;
-              },
+    return BlocConsumer<AuthBloc, AuthStates>(
+      listener: (context, state) {
+        if (state is RegisterSuccess) {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => const HomeView()));
+        }
+        if (state is AuthFailure &&
+            state.errorMessage == "user_already_exists") {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("User already registered")));
+        }
+      },
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Form(
+            key: globalKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomTextField(
+                  controller: email,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please enter your email";
+                    }
+                    if (!EmailValidator.validate(value)) {
+                      return "Please enter a valid email";
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 12),
+                CustomTextField(
+                  hintText: 'password',
+                  controller: password,
+                  obscureText: true,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please enter your password";
+                    }
+                    if (value.length < 6) {
+                      return "Password must be at least 6 characters";
+                    }
+                    return null;
+                  },
+                ),
+                AlreadyOrNotHaveAccountWidget(
+                    onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const LoginView()))),
+                const SizedBox(height: 12),
+                state is AuthLoading
+                    ? const CircularProgressIndicator()
+                    : CustomButton(onPressed: () {
+                        if (globalKey.currentState!.validate()) {
+                          globalKey.currentState!.save();
+                          context.read<AuthBloc>().add(RegisterEvent(
+                              email: email.text, password: password.text));
+                        }
+                      })
+              ],
             ),
-            const SizedBox(height: 12),
-            CustomTextField(
-              hintText: 'password',
-              controller: password,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Please enter your password";
-                }
-                if (value.length < 6) {
-                  return "Password must be at least 6 characters";
-                }
-                return null;
-              },
-            ),
-            AlreadyOrNotHaveAccountWidget(
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const LoginView()))),
-            const SizedBox(height: 12),
-            CustomButton(onPressed: () {
-              if (globalKey.currentState!.validate()) {
-                globalKey.currentState!.save();
-              }
-            })
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

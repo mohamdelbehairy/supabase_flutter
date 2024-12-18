@@ -56,6 +56,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
             CustomTextField(
               hintText: 'password',
               controller: password,
+              obscureText: true,
               validator: (value) {
                 if (value!.isEmpty) {
                   return "Please enter your password";
