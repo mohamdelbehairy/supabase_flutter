@@ -61,6 +61,20 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
             .resetPassword(Supabase.instance.client.auth.currentUser!.email!);
         emit(ResetPasswordSuccess());
       }
+
+      if (event is GoogleEvent) {
+        emit(GoogleLoading());
+        try {
+          final response = await _authRepo.signInWithGoogle();
+          if (response!.user != null) {
+            await _prefService.setString();
+            emit(GoogleSuccess());
+          }
+        } catch (e) {
+          emit(AuthFailure(errorMessage: e.toString()));
+          log("error from googel auth: $e");
+        }
+      }
     });
   }
 

@@ -8,13 +8,13 @@ import 'features/home/presentation/views/home_view.dart';
 
 void main() async {
   await initSupabase();
-  _init();
+  await _init(); 
 }
 
 _init() async {
   final SharedPrefService sharedPrefService = SharedPrefService();
   final userID = await sharedPrefService.getString();
-  userID.isNotEmpty
-      ? runApp(const MyApp(view: HomeView()))
-      : runApp(const MyApp(view: RegisterView()));
+
+  runApp(
+      MyApp(view: userID.isNotEmpty ? const HomeView() : const RegisterView()));
 }

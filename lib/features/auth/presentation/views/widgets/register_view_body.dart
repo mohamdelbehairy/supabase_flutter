@@ -10,6 +10,7 @@ import '../login_view.dart';
 import 'already_or_not_have_account_widget.dart';
 import 'custom_button.dart';
 import 'custom_text_field.dart';
+import 'login_using_google_widget.dart';
 
 class RegisterViewBody extends StatefulWidget {
   const RegisterViewBody({super.key});
@@ -91,15 +92,15 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                         MaterialPageRoute(
                             builder: (context) => const LoginView()))),
                 const SizedBox(height: 12),
-                state is AuthLoading
-                    ? const CircularProgressIndicator()
-                    : CustomButton(onPressed: () {
-                        if (globalKey.currentState!.validate()) {
-                          globalKey.currentState!.save();
-                          context.read<AuthBloc>().add(RegisterEvent(
-                              email: email.text, password: password.text));
-                        }
-                      })
+                CustomButton(onPressed: () {
+                  if (globalKey.currentState!.validate()) {
+                    globalKey.currentState!.save();
+                    context.read<AuthBloc>().add(RegisterEvent(
+                        email: email.text, password: password.text));
+                  }
+                }),
+                const SizedBox(height: 32),
+                const LoginUsingGoogleWidget(),
               ],
             ),
           ),

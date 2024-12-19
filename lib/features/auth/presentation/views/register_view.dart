@@ -9,7 +9,7 @@ class RegisterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(),
+      appBar: customAppBar(automaticallyImplyLeading: false),
       body: const RegisterViewBody(),
     );
   }

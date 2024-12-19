@@ -9,6 +9,7 @@ import '../../manager/auth/auth_bloc.dart';
 import 'already_or_not_have_account_widget.dart';
 import 'custom_button.dart';
 import 'custom_text_field.dart';
+import 'login_using_google_widget.dart';
 
 class LoginViewBody extends StatefulWidget {
   const LoginViewBody({super.key});
@@ -91,17 +92,17 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                     buttonName: "Register",
                     onPressed: () => Navigator.of(context).pop()),
                 const SizedBox(height: 12),
-                state is AuthLoading
-                    ? const CircularProgressIndicator()
-                    : CustomButton(
-                        name: "Login",
-                        onPressed: () {
-                          if (globalKey.currentState!.validate()) {
-                            globalKey.currentState!.save();
-                            context.read<AuthBloc>().add(LoginEvent(
-                                email: email.text, password: password.text));
-                          }
-                        })
+                CustomButton(
+                    name: "Login",
+                    onPressed: () {
+                      if (globalKey.currentState!.validate()) {
+                        globalKey.currentState!.save();
+                        context.read<AuthBloc>().add(LoginEvent(
+                            email: email.text, password: password.text));
+                      }
+                    }),
+                const SizedBox(height: 32),
+                const LoginUsingGoogleWidget(),
               ],
             ),
           ),
