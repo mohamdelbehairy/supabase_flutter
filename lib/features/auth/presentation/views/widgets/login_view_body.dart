@@ -9,6 +9,7 @@ import '../../manager/auth/auth_bloc.dart';
 import 'already_or_not_have_account_widget.dart';
 import 'custom_button.dart';
 import 'custom_text_field.dart';
+import 'login_using_facebook_widget.dart';
 import 'login_using_google_widget.dart';
 
 class LoginViewBody extends StatefulWidget {
@@ -54,7 +55,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
       },
       builder: (context, state) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Form(
             key: globalKey,
             child: Column(
@@ -103,6 +104,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                     }),
                 const SizedBox(height: 32),
                 const LoginUsingGoogleWidget(),
+                const SizedBox(height: 16),
+                const LoginUsingFacebookWidget()
               ],
             ),
           ),

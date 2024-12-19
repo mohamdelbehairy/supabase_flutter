@@ -75,6 +75,21 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
           log("error from googel auth: $e");
         }
       }
+      if (event is FacebookEvent) {
+        emit(FacebookLoading());
+        try {
+          await _authRepo.signInWithFacebook();
+          await Future.delayed(const Duration(seconds: 10));
+          log("${Supabase.instance.client.auth.currentUser?.id}");
+          if (Supabase.instance.client.auth.currentUser != null) {
+            await _prefService.setString();
+            emit(FacebookSuccess());
+          }
+        } catch (e) {
+          emit(AuthFailure(errorMessage: e.toString()));
+          log("error from facebook auth: $e");
+        }
+      }
     });
   }
 

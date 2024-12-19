@@ -36,8 +36,7 @@ class AuthRepoImpl extends AuthRepo {
   @override
   Future<AuthResponse?> signInWithGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn(
-        clientId: SecretKey.iosClientID,
-        serverClientId: SecretKey.webClientID);
+        clientId: SecretKey.iosClientID, serverClientId: SecretKey.webClientID);
 
     GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
@@ -52,5 +51,12 @@ class AuthRepoImpl extends AuthRepo {
       }
     }
     return null;
+  }
+
+  @override
+  Future<void> signInWithFacebook() async {
+    await _client.auth.signInWithOAuth(OAuthProvider.facebook,
+        redirectTo:
+            "https://tgrqdzakirkpkdcfkpux.supabase.co/auth/v1/callback");
   }
 }

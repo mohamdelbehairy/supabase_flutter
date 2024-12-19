@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">supabse flutter</string>
+    <string name="facebook_app_id">895628499353340</string>
+    <string name="fb_login_protocol_scheme">fb895628499353340</string>
+    <string name="facebook_client_token">1b123f63b3c0663a0198ba83322b6ea0</string>
+</resources>

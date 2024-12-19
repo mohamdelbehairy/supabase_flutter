@@ -15,3 +15,5 @@ final class LogoutEvent extends AuthEvents {}
 final class ResetPasswordEvent extends AuthEvents {}
 
 final class GoogleEvent extends AuthEvents {}
+
+final class FacebookEvent extends AuthEvents {}

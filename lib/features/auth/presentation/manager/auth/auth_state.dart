@@ -17,6 +17,11 @@ final class GoogleLoading extends AuthStates {}
 
 final class GoogleSuccess extends AuthStates {}
 
+final class FacebookLoading extends AuthStates {}
+
+
+final class FacebookSuccess extends AuthStates {}
+
 final class AuthFailure extends AuthStates {
   final String errorMessage;
 

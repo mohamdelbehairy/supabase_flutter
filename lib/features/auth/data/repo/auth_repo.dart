@@ -6,4 +6,5 @@ abstract class AuthRepo {
   Future<void> logout();
   Future<void> resetPassword(String email);
   Future<AuthResponse?> signInWithGoogle();
+  Future<void> signInWithFacebook();
 }

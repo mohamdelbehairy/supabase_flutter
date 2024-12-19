@@ -5,6 +5,7 @@ import 'package:supabase_flutter_app/features/auth/presentation/manager/auth/aut
 
 import '../../../../home/presentation/views/home_view.dart';
 import '../../manager/auth/auth_events.dart';
+import 'custom_auth_button.dart';
 
 class LoginUsingGoogleWidget extends StatelessWidget {
   const LoginUsingGoogleWidget({super.key});
@@ -19,23 +20,9 @@ class LoginUsingGoogleWidget extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return GestureDetector(
+        return CustomAuthButton(
+          isLoading: state is GoogleLoading,
           onTap: () => context.read<AuthBloc>().add(GoogleEvent()),
-          child: Container(
-            height: 50,
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: Colors.black, borderRadius: BorderRadius.circular(32)),
-            child: Center(
-                child: state is GoogleLoading
-                    ? const SizedBox(
-                        height: 30,
-                        width: 30,
-                        child: CircularProgressIndicator(color: Colors.white),
-                      )
-                    : const Text("Sign in with Google",
-                        style: TextStyle(color: Colors.white))),
-          ),
         );
       },
     );
