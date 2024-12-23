@@ -20,8 +20,13 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
           final response =
               await _authRepo.register(event.email, event.password);
           if (response.user != null) {
-            log("uid: ${Supabase.instance.client.auth.currentUser!.id}");
             await _prefService.setString();
+
+            await DataRepoImpl().addUserData(UserDataModel(
+                userID: response.user!.id,
+                userName: "from email",
+                email: response.user!.email!,
+                createdAt: DateTime.parse(response.user!.createdAt)));
             emit(RegisterSuccess());
           }
         } on AuthException catch (e) {
@@ -72,8 +77,9 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
             await _prefService.setString();
             await DataRepoImpl().addUserData(UserDataModel(
                 userID: response.user!.id,
-                userName: response.user!.userMetadata!["name"],
-                email: response.user!.email!));
+                userName: response.user!.userMetadata!['name'],
+                email: response.user!.email!,
+                createdAt: DateTime.parse(response.user!.createdAt)));
             emit(GoogleSuccess());
           }
         } catch (e) {
