@@ -2,8 +2,10 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:supabase_flutter_app/core/utils/shared_pref_service.dart';
+import 'package:supabase_flutter_app/features/auth/data/models/user_data_model.dart';
+import 'package:supabase_flutter_app/features/auth/data/repo/data/data_repo_impl.dart';
 
-import '../../../data/repo/auth_repo.dart';
+import '../../../data/repo/auth/auth_repo.dart';
 import 'auth_events.dart';
 import 'auth_state.dart';
 
@@ -68,6 +70,10 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
           final response = await _authRepo.signInWithGoogle();
           if (response!.user != null) {
             await _prefService.setString();
+            await DataRepoImpl().addUserData(UserDataModel(
+                userID: response.user!.id,
+                userName: response.user!.userMetadata!["name"],
+                email: response.user!.email!));
             emit(GoogleSuccess());
           }
         } catch (e) {
