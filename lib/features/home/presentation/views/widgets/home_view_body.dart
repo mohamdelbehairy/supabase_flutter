@@ -14,6 +14,8 @@ class HomeViewBody extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                if (state.userData.userImage != null)
+                  Image.network(state.userData.userImage!),
                 Text(state.userData.userID),
                 Text(state.userData.userName),
                 Text(state.userData.email),

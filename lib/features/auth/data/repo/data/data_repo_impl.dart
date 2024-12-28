@@ -32,8 +32,10 @@ class DataRepoImpl extends DataRepo {
   }
 
   @override
-  Future<void> updateUserData() async {
-    await _client.from("user").update({"userName": "Mohamed Elbehairy"}).eq(
-        "userID", _client.auth.currentUser!.id);
+  Future<void> updateUserData(String userImage) async {
+    await _client
+        .from("user")
+        .update({"userName": "Mohamed Elbehairy", "userImage": userImage}).eq(
+            "userID", _client.auth.currentUser!.id);
   }
 }

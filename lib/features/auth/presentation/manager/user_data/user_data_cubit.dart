@@ -23,12 +23,11 @@ class UserDataCubit extends Cubit<UserDataState> {
     }
   }
 
-  Future<void> updateUserData() async {
+  Future<void> updateUserData({required String userImage}) async {
     emit(GetUserDataLoading());
     try {
-      await _dataRepo.updateUserData();
+      await _dataRepo.updateUserData(userImage);
       emit(UpdateUserDataSuccess());
-      // await getUserData();
     } catch (e) {
       emit(UserDataFailure(errorMessage: e.toString()));
       log('error from update user data: $e');

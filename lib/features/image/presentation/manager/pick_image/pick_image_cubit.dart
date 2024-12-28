@@ -17,7 +17,6 @@ class PickImageCubit extends Cubit<PickImageState> {
     try {
       image = await _imageRepo.pickImage();
       if (image != null) {
-        log("image: $image");
         emit(PickImageSuccess());
       }
     } catch (e) {

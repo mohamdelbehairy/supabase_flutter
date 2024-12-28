@@ -28,6 +28,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
                 userID: response.user!.id,
                 userName: "from email",
                 email: response.user!.email!,
+                userImage: null,
                 createdAt: DateTime.parse(response.user!.createdAt)));
             emit(RegisterSuccess());
           }
@@ -81,6 +82,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
                   userID: response.user!.id,
                   userName: response.user!.userMetadata!['name'],
                   email: response.user!.email!,
+                  userImage: response.user!.userMetadata!['image'],
                   createdAt: DateTime.parse(response.user!.createdAt)));
             }
 
