@@ -24,4 +24,16 @@ class DataRepoImpl extends DataRepo {
         .select()
         .eq("userID", _client.auth.currentUser!.id);
   }
+
+  @override
+  Future<bool> isUserDataExist() async {
+    final userData = await getUserData();
+    return userData.isNotEmpty;
+  }
+
+  @override
+  Future<void> updateUserData() async {
+    await _client.from("user").update({"userName": "Mohamed Elbehairy"}).eq(
+        "userID", _client.auth.currentUser!.id);
+  }
 }

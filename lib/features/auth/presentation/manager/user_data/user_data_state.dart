@@ -12,6 +12,8 @@ final class GetUserDataSuccess extends UserDataState {
   GetUserDataSuccess({required this.userData});
 }
 
+final class UpdateUserDataSuccess extends UserDataState {}
+
 final class UserDataFailure extends UserDataState {
   final String errorMessage;
 

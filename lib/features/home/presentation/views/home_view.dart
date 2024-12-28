@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter_app/features/auth/data/repo/data/data_repo_impl.dart';
-import 'package:supabase_flutter_app/features/auth/presentation/manager/user_data/user_data_cubit.dart';
+import 'package:supabase_flutter_app/features/home/presentation/views/edit_view.dart';
 
 import '../../../../core/widgets/custom_app_bar.dart';
 import 'widgets/custom_logout_button.dart';
@@ -12,16 +10,17 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => UserDataCubit(DataRepoImpl())..getUserData(),
-      child: Scaffold(
-        appBar: customAppBar(
-            title: "Home",
-            automaticallyImplyLeading: false,
-            actions: [const CustomLogoutButton()]),
-        body: const HomeViewBody(),
+    return Scaffold(
+      appBar: customAppBar(
+          title: "Home",
+          automaticallyImplyLeading: false,
+          actions: [const CustomLogoutButton()]),
+      body: const HomeViewBody(),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (contect) => const EditView())),
       ),
     );
   }
 }
-

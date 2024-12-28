@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:supabase_flutter_app/core/utils/shared_pref_service.dart';
 import 'package:supabase_flutter_app/features/auth/data/models/user_data_model.dart';
-import 'package:supabase_flutter_app/features/auth/data/repo/data/data_repo_impl.dart';
+import 'package:supabase_flutter_app/features/auth/data/repo/data/data_repo.dart';
 
 import '../../../data/repo/auth/auth_repo.dart';
 import 'auth_events.dart';
@@ -12,7 +12,9 @@ import 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvents, AuthStates> {
   final AuthRepo _authRepo;
   final SharedPrefService _prefService;
-  AuthBloc(this._authRepo, this._prefService) : super(AuthInitial()) {
+  final DataRepo _dataRepo;
+  AuthBloc(this._authRepo, this._prefService, this._dataRepo)
+      : super(AuthInitial()) {
     on<AuthEvents>((event, emit) async {
       if (event is RegisterEvent) {
         emit(AuthLoading());
@@ -22,7 +24,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
           if (response.user != null) {
             await _prefService.setString();
 
-            await DataRepoImpl().addUserData(UserDataModel(
+            await _dataRepo.addUserData(UserDataModel(
                 userID: response.user!.id,
                 userName: "from email",
                 email: response.user!.email!,
@@ -44,7 +46,6 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
         try {
           final response = await _authRepo.login(event.email, event.password);
           if (response.user != null) {
-            log("uid: ${Supabase.instance.client.auth.currentUser!.id}");
             await _prefService.setString();
             emit(LoginSuccess());
           }
@@ -75,11 +76,14 @@ class AuthBloc extends Bloc<AuthEvents, AuthStates> {
           final response = await _authRepo.signInWithGoogle();
           if (response!.user != null) {
             await _prefService.setString();
-            await DataRepoImpl().addUserData(UserDataModel(
-                userID: response.user!.id,
-                userName: response.user!.userMetadata!['name'],
-                email: response.user!.email!,
-                createdAt: DateTime.parse(response.user!.createdAt)));
+            if (!await _dataRepo.isUserDataExist()) {
+              await _dataRepo.addUserData(UserDataModel(
+                  userID: response.user!.id,
+                  userName: response.user!.userMetadata!['name'],
+                  email: response.user!.email!,
+                  createdAt: DateTime.parse(response.user!.createdAt)));
+            }
+
             emit(GoogleSuccess());
           }
         } catch (e) {

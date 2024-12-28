@@ -23,6 +23,18 @@ class UserDataCubit extends Cubit<UserDataState> {
     }
   }
 
+  Future<void> updateUserData() async {
+    emit(GetUserDataLoading());
+    try {
+      await _dataRepo.updateUserData();
+      emit(UpdateUserDataSuccess());
+      // await getUserData();
+    } catch (e) {
+      emit(UserDataFailure(errorMessage: e.toString()));
+      log('error from update user data: $e');
+    }
+  }
+
   @override
   void onChange(Change<UserDataState> change) {
     log("change: $change");
